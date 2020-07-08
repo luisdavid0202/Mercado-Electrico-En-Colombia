@@ -1,7 +1,10 @@
 # Standard library imports
-import pandas as pd
+
 import time
 import os
+
+# Third party imports
+import pandas as pd
 
 # Local application/library imports
 import setup
@@ -9,7 +12,17 @@ import setup
 start = time.time()
 
 parent_dir = os.getcwd()
-path_download_files = os.path.join(parent_dir, setup.DATA_DIRECTORY_NAME)
+path_downloaded_files = os.path.join(parent_dir, setup.DATA_DIRECTORY_NAME)
+
+try:
+    os.makedirs(setup.CSV_IN_ONE_FILE_DIRECTORY_NAME)
+    print(f"\n[INFO] Creating directory: '{setup.CSV_IN_ONE_FILE_DIRECTORY_NAME}'...")
+except FileExistsError:
+    print(
+        f"\n[INFO] Directory '{setup.CSV_IN_ONE_FILE_DIRECTORY_NAME}'' already exist..."
+    )
+    pass
+
 
 db = pd.DataFrame(
     columns=[
@@ -24,32 +37,38 @@ db = pd.DataFrame(
 )
 
 months = {
-    'enero': 1,
-    'febrero': 2,
-    'marzo': 3,
-    'abril':4,
-    'mayo':5,
-    'junio':6,
-    'julio':7,
-    'agosto':8,
-    'septiembre':9,
-    'octubre':10,
-    'noviembre':11,
-    'diciembre':12
-    }
+    "enero": 1,
+    "febrero": 2,
+    "marzo": 3,
+    "abril": 4,
+    "mayo": 5,
+    "junio": 6,
+    "julio": 7,
+    "agosto": 8,
+    "septiembre": 9,
+    "octubre": 10,
+    "noviembre": 11,
+    "diciembre": 12,
+}
 
 count_input = 0
 
-for filename in os.listdir(path_download_files):
+for filename in os.listdir(path_downloaded_files):
 
     count_input += 1
-    print(f"[INFO] Procesing a file named '{filename}' {count_input}/{len(os.listdir(path_download_files))}")
+    print(
+        f"[INFO] Processing a file named '{filename}' {count_input}/{len(os.listdir(path_downloaded_files))}"
+    )
 
-    file = pd.read_excel(os.path.join(path_download_files, filename), sheet_name=0, header=None)
-    
+    file = pd.read_excel(
+        os.path.join(path_downloaded_files, filename), sheet_name=0, header=None
+    )
+
     positions = list()
+
     result = file.isin(["DEPARTAMENTO"])
     columns = result.any()
+
     true_columns = list(columns[columns == True].index)
 
     for col in true_columns:
@@ -60,7 +79,9 @@ for filename in os.listdir(path_download_files):
             positions.append((row, col))
 
     file = file.iloc[positions[0][0] :, positions[0][1] :]
+
     new_header = list(file.iloc[0])
+
     new_header2 = [
         str(col)
         .replace("Í", "I")
@@ -70,6 +91,7 @@ for filename in os.listdir(path_download_files):
         .upper()
         for col in new_header
     ]
+
     file = file[1:]
     file.columns = new_header2
     file = file[
@@ -126,11 +148,13 @@ for filename in os.listdir(path_download_files):
 
     db = db.append(file, ignore_index=True)
 
-db.to_csv('data.csv',index=False)
+db.to_csv(os.path.join(setup.CSV_IN_ONE_FILE_DIRECTORY_NAME, "data.csv"), index=False)
 
 end = time.time()
 
 if end >= 60:
-    print("[INFO] Elapsed time on execution: {:.2f} minutes...".format((end - start) / 60))
+    print(
+        "[INFO] Elapsed time on execution: {:.2f} minutes...".format((end - start) / 60)
+    )
 else:
     print("[INFO] Elapsed time on execution: {:.2f} seconds...".format(end - start))
