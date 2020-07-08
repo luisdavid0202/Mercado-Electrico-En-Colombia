@@ -25,7 +25,7 @@ app.layout = html.Div(
                         "name": "bicicletas electricas",
                     },
                 ],
-                "layout": {"title": "Ejemplo básico Dash"},
+                "layout": {"title": "Ejemplo Dash"},
             },
         ),
     ]
