@@ -21,7 +21,7 @@ try:
     os.makedirs(path_to_download_files)
     print(f"\n[INFO] Creating directory: '{path_to_download_files}'...")
 except FileExistsError:
-    print(f"\n[INFO] Directory '{path_to_download_files}'' already exist...")
+    print(f"\n[INFO] Directory '{path_to_download_files}' already exist...")
     pass
 
 if platform.system() == "Linux":

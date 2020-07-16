@@ -19,7 +19,7 @@ try:
     print(f"\n[INFO] Creating directory: '{setup.CSV_IN_ONE_FILE_DIRECTORY_NAME}'...")
 except FileExistsError:
     print(
-        f"\n[INFO] Directory '{setup.CSV_IN_ONE_FILE_DIRECTORY_NAME}'' already exist..."
+        f"\n[INFO] Directory '{setup.CSV_IN_ONE_FILE_DIRECTORY_NAME}' already exist..."
     )
     pass
 
@@ -148,8 +148,9 @@ for filename in os.listdir(path_downloaded_files):
 
     db = db.append(file, ignore_index=True)
 
-    db['NIVEL TENSION'] = db.apply(lambda x : str(x['NIVEL TENSION']).replace('STN','5'),axis=1)
-    db = db.astype({"PRECIO": float, "DEMANDA": float, "FECHA": int, "NIVEL TENSION": int})
+
+db['NIVEL TENSION'] = db.apply(lambda x : str(x['NIVEL TENSION']).replace('STN','5'),axis=1)
+db = db.astype({"PRECIO": float, "DEMANDA": float, "FECHA": int, "NIVEL TENSION": int})
 
 db.to_csv(os.path.join(setup.CSV_IN_ONE_FILE_DIRECTORY_NAME, "data.csv"), index=False)
 
