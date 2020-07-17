@@ -1,24 +1,29 @@
+# Standard library imports
 import os
 
+# Third party imports
 import boto3
 import botocore
 import paramiko
 
-os.system("scp -i colelectrica.pem csv_in_one_file/data.csv ubuntu@ec2-54-92-164-20.compute-1.amazonaws.com:~/")
+# Local application/library imports
+import setup
 
-key = paramiko.RSAKey.from_private_key_file("colelectrica.pem")
+os.system(setup.COMMAND_CSV_TO_UBUNTU)
+
+key = paramiko.RSAKey.from_private_key_file(setup.PEM_KEY_PATH)
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 try:
-    client.connect(hostname="35.175.129.74", username="ubuntu", pkey=key)
+    client.connect(hostname=setup.HOST_NAME, username=setup.USERNAME, pkey=key)
 
-    stdin, stdout, stderr = client.exec_command("python3 insert_sql.py")
-    
+    stdin, stdout, stderr = client.exec_command(setup.INSERT_DATA)
+
     print(stdout.read())
 
     client.close()
 
-except Exception as  e:
+except Exception as e:
     print(e)

@@ -74,6 +74,8 @@ driver.close()
 end = time.time()
 
 if end >= 60:
-    print("[INFO] Elapsed time on execution: {:.2f} minutes...".format((end - start) / 60))
+    print(
+        "[INFO] Elapsed time on execution: {:.2f} minutes...".format((end - start) / 60)
+    )
 else:
     print("[INFO] Elapsed time on execution: {:.2f} seconds...".format(end - start))

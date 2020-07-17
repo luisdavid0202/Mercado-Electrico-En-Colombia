@@ -1,5 +1,4 @@
 # Standard library imports
-
 import time
 import os
 
@@ -149,7 +148,9 @@ for filename in os.listdir(path_downloaded_files):
     db = db.append(file, ignore_index=True)
 
 
-db['NIVEL TENSION'] = db.apply(lambda x : str(x['NIVEL TENSION']).replace('STN','5'),axis=1)
+db["NIVEL TENSION"] = db.apply(
+    lambda x: str(x["NIVEL TENSION"]).replace("STN", "5"), axis=1
+)
 db = db.astype({"PRECIO": float, "DEMANDA": float, "FECHA": int, "NIVEL TENSION": int})
 
 db.to_csv(os.path.join(setup.CSV_IN_ONE_FILE_DIRECTORY_NAME, "data.csv"), index=False)
