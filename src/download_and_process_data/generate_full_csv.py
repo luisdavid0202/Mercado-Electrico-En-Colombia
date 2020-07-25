@@ -4,6 +4,7 @@ import os
 
 # Third party imports
 import pandas as pd
+import unidecode
 
 # Local application/library imports
 import setup
@@ -152,6 +153,30 @@ db["NIVEL TENSION"] = db.apply(
     lambda x: str(x["NIVEL TENSION"]).replace("STN", "5"), axis=1
 )
 db = db.astype({"PRECIO": float, "DEMANDA": float, "FECHA": int, "NIVEL TENSION": int})
+
+
+def generate_agents(row: pd.core.series.Series) -> str:    
+    var = unidecode.unidecode(row["AGENTE COMERCIALIZADOR"])    
+       
+    var = var.replace(".", "") 
+    var = var.replace("  ", " ")
+
+    if 'ESP' in var:
+        index = var.index('ESP')   
+        var = var[:index + 3]   
+    
+    if "RUITOQUE" in var:
+        var = "RUITOQUE ESP"
+
+    if "ENERMONT" in var:
+        var = "ENERMONT ESP"
+    
+    return var
+
+db["AGENTE"] = db.apply(generate_agents, axis=1)
+
+db['MUNICIPIO'] = db['MUNICIPIO'].str.upper()
+db['DEPARTAMENTO'] = db['DEPARTAMENTO'].str.upper()
 
 db.to_csv(os.path.join(setup.CSV_IN_ONE_FILE_DIRECTORY_NAME, "data.csv"), index=False)
 
