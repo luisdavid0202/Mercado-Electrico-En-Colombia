@@ -6,7 +6,10 @@ app = dash.Dash()
 
 app.layout = html.Div(
     children=[
+
         html.H1(children="Tutoriales Dash en AprenderPython.com"),
+
+        html.H1(children="Demo basico"),
 
         dcc.Graph(
             id="ejemplo",
@@ -22,10 +25,16 @@ app.layout = html.Div(
                         "x": [1, 2, 3, 4],
                         "y": [5, 2, 8, 8],
                         "type": "bar",
+
                         "name": "Bicicletas electricas",
                     },
                 ],
                 "layout": {"title": "Ejemplo básico en Dash"},
+
+                        "name": "bicicletas electricas",
+                    },
+                ],
+                "layout": {"title": "Ejemplo básico Dash"},
             },
         ),
     ]
